@@ -1,4 +1,4 @@
-import { Hint } from "@/components/hint";
+import { Hint } from "@/components/Hint";
 import { List } from "./List";
 import { NewButton } from "./NewButton";
 
