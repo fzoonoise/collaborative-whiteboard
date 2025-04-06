@@ -18,7 +18,7 @@ export const Item = ({ id, name, imageUrl }: ItemProps) => {
 
   const isActive = organization?.id === id;
 
-  const handleClick = () => {
+  const handleActiveClick = () => {
     if (!setActive) return;
 
     setActive({ organization: id });
@@ -34,7 +34,7 @@ export const Item = ({ id, name, imageUrl }: ItemProps) => {
           )}
           src={imageUrl}
           alt={name}
-          onClick={handleClick}
+          onClick={handleActiveClick}
           fill
         />
       </Hint>
