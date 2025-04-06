@@ -30,7 +30,7 @@ export const EmptyBoards = () => {
   return (
     <div className="h-full flex flex-col items-center justify-center">
       <Image
-        src="/empty-boards.svg"
+        src="/empty-boards.png"
         alt="Empty boards"
         height={110}
         width={110}

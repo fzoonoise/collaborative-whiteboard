@@ -16,7 +16,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Toaster theme="light" closeButton richColors />
+        <Toaster closeButton />
         <ConvexClientProvider>{children}</ConvexClientProvider>
       </body>
     </html>
