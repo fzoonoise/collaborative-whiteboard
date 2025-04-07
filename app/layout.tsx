@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ConvexClientProvider } from "@/providers/ConvexClientProvider";
 import { Toaster } from "@/components/ui/sonner";
+import { ModalProvider } from "@/providers/ModalProvider";
 
 export const metadata: Metadata = {
   title: "Collaborative Whiteboard",
@@ -16,8 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Toaster closeButton />
-        <ConvexClientProvider>{children}</ConvexClientProvider>
+        <ConvexClientProvider>
+          <Toaster duration={2000} />
+          <ModalProvider />
+          {children}
+        </ConvexClientProvider>
       </body>
     </html>
   );
