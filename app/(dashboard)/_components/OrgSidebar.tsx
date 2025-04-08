@@ -39,8 +39,6 @@ export const OrgSidebar = () => {
   const searchParams = useSearchParams();
   const favorites = searchParams.get("favorites");
 
-  console.log(favorites, "favorites");
-
   return (
     <div className="flex-col hidden space-y-6 lg:flex w-[206px] pl-5 pt-5">
       <Link href="/">

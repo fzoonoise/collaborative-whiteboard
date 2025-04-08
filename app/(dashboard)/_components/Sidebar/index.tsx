@@ -14,11 +14,10 @@ const Sidebar = () => {
         <Hint label="Source Code" side="right" align="start" sideOffset={18}>
           <a
             className="flex items-center justify-center w-full h-full transition rounded-sm bg-white/25 opacity-60 hover:opacity-100"
-            // href={links.sourceCode}
+            // href={links.sourceCode} // TODO
             target="_blank"
             rel="noreferrer noopener"
           >
-            {/* <Github className="w-5 h-5 text-white" /> */}
           </a>
         </Hint>
       </div>

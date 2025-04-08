@@ -2,10 +2,11 @@ import { v } from "convex/values";
 
 import { mutation, query } from "./_generated/server";
 import { devLog } from "@/lib/utils";
+import { Id } from "./_generated/dataModel";
 
 const images = Array.from(
   { length: 10 },
-  (_, index) => `/placeholders/${index}.svg`
+  (_, index) => `/placeholders/${index + 1}.svg`
 );
 
 export const create = mutation({
@@ -28,8 +29,6 @@ export const create = mutation({
       imageUrl: randomImage,
     });
 
-    devLog("board",board)
-
     return board;
   },
 });
@@ -41,19 +40,30 @@ export const remove = mutation({
 
     if (!identity) throw new Error("Unauthorized");
 
-    const userId = identity.subject;
+    // tutorial code:
+    // const userId = identity.subject;
+    // const existingFavorite = await context.db
+    //   .query("userFavorites")
+    //   .withIndex(
+    //     "by_user_board",
+    //     (
+    //       q // q === query
+    //     ) => q.eq("userId", userId).eq("boardId", args.id) // eq === equals
+    //   )
+    //   .unique();
 
-    const existingFavorite = await context.db
+    // if (existingFavorite) await context.db.delete(existingFavorite._id);
+
+    // fix issue:
+    // Delete all favorite entries that reference this board (avoid dangling references)
+    const relatedFavorites = await context.db
       .query("userFavorites")
-      .withIndex(
-        "by_user_board",
-        (
-          q // q === query
-        ) => q.eq("userId", userId).eq("boardId", args.id) // eq === equals
-      )
-      .unique();
+      .withIndex("by_board", (q) => q.eq("boardId", args.id))
+      .collect();
 
-    if (existingFavorite) await context.db.delete(existingFavorite._id);
+    for (const fav of relatedFavorites) {
+      await context.db.delete(fav._id);
+    }
 
     await context.db.delete(args.id);
   },
@@ -149,5 +159,43 @@ export const get = query({
     if (!board) throw new Error(`Board with id ${args.id} not found`);
 
     return board;
+  },
+});
+
+
+/**
+ * One-time cleanup: delete favorites pointing to non-existent boards.
+ *
+ * In older tutorial versions, the use of `getAllOrThrow` may result in query errors
+ * when any board ID referenced in user favorites no longer exists in the database.
+ *
+ * If you encounter this issue, you can manually remove invalid favorite records
+ * using the `cleanOrphanFavorites` mutation provided below.
+ *
+ * Steps to run the cleanup function from the Convex Cloud Console:
+ * 1. Go to the Convex Cloud Console: https://dashboard.convex.dev/
+ * 2. Select your project, then click the “Functions” tab on the left sidebar.
+ * 3. Find the function named `cleanup:cleanOrphanFavorites`.
+ * 4. Click the ▶ Run button to execute the function.
+ * 5. The system will show the result, e.g., `{ deletedCount: 3 }`.
+ */
+export const cleanOrphanFavorites = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const allFavorites = await ctx.db.query("userFavorites").collect();
+
+    let deletedCount = 0;
+
+    for (const fav of allFavorites) {
+      const board = await ctx.db.get(fav.boardId as Id<"boards">);
+
+      if (board === null) {
+        await ctx.db.delete(fav._id);
+        deletedCount++;
+      }
+    }
+
+    // Return how many orphan favorites were deleted
+    return { deletedCount };
   },
 });

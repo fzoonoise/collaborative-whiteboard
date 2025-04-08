@@ -43,15 +43,15 @@ export const BoardList = ({ orgId, query }: BoardListProps) => {
     );
   }
 
-  if (!data?.length && query.search) {
+  if (!data.length && query.search) {
     return <EmptySearch />;
   }
 
-  if (!data?.length && query.favorites) {
+  if (!data.length && query.favorites) {
     return <EmptyFavorites />;
   }
 
-  if (!data?.length) {
+  if (!data.length) {
     return <EmptyBoards />;
   }
 
@@ -62,7 +62,7 @@ export const BoardList = ({ orgId, query }: BoardListProps) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-5 mt-8 pb-10">
         BoardCard
         <NewBoardButton orgId={orgId} />
-        {data?.map((board) => (
+        {data.map((board) => (
           <BoardCard
             key={board._id}
             id={board._id}

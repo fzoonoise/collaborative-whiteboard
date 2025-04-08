@@ -1,8 +1,8 @@
 import { v } from "convex/values";
-import { getAllOrThrow } from "convex-helpers/server/relationships";
+// import { getAllOrThrow } from "convex-helpers/server/relationships"; // tutorial code
+import { getAll } from "convex-helpers/server/relationships";
 
 import { query } from "./_generated/server";
-// import { devLog } from "@/lib/utils";
 
 export const get = query({
   args: {
@@ -24,14 +24,15 @@ export const get = query({
         .order("desc")
         .collect();
 
- 
-      // devLog("favoriteBoards",favoriteBoards)
       const ids = favoriteBoards.map((board) => board.boardId);
-      // devLog("ids",ids)
 
-      // BUG: When selecting favorite boards, an error occurs: "Could not find id".
-      const boards = await getAllOrThrow(context.db, ids);
-      // devLog("boards",boards)
+      // bug: version issue - When selecting favorite boards, an error occurs: "Could not find id".
+      // const boards = await getAllOrThrow(context.db, ids); // tutorial code
+
+      // fix issue:
+      // getAllOrThrow throws if any board is missing — use getAll and filter nulls
+      const boardDocs = await getAll(context.db, ids);
+      const boards = boardDocs.filter((board) => board !== null); 
 
       return boards.map((board) => ({
         ...board,
@@ -39,15 +40,15 @@ export const get = query({
       }));
     }
 
-    const title = args.search as string;
+    const searchQueryTitle = args.search as string;
 
     let boards = [];
 
-    if (title) {
+    if (searchQueryTitle) {
       boards = await context.db
         .query("boards")
         .withSearchIndex("search_title", (q) =>
-          q.search("title", title).eq("orgId", args.orgId)
+          q.search("title", searchQueryTitle).eq("orgId", args.orgId)
         )
         .collect();
     } else {
