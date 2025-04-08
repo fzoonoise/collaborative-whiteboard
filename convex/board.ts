@@ -151,12 +151,10 @@ export const unfavorite = mutation({
   },
 });
 
-export const get = query({
+export const getBoardById = query({
   args: { id: v.id("boards") },
   handler: async (context, args) => {
     const board = context.db.get(args.id);
-
-    if (!board) throw new Error(`Board with id ${args.id} not found`);
 
     return board;
   },
@@ -181,16 +179,16 @@ export const get = query({
  */
 export const cleanOrphanFavorites = mutation({
   args: {},
-  handler: async (ctx) => {
-    const allFavorites = await ctx.db.query("userFavorites").collect();
+  handler: async (context) => {
+    const allFavorites = await context.db.query("userFavorites").collect();
 
     let deletedCount = 0;
 
     for (const fav of allFavorites) {
-      const board = await ctx.db.get(fav.boardId as Id<"boards">);
+      const board = await context.db.get(fav.boardId as Id<"boards">);
 
       if (board === null) {
-        await ctx.db.delete(fav._id);
+        await context.db.delete(fav._id);
         deletedCount++;
       }
     }
