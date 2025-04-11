@@ -16,7 +16,7 @@ import { api } from "@/convex/_generated/api";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import { useRenameModalStore } from "@/store/useRenameModalStore";
 
-type ActionsProps = {
+type BoardActionsProps = {
   children: React.ReactNode;
   side?: DropdownMenuContentProps["side"];
   sideOffset?: DropdownMenuContentProps["sideOffset"];
@@ -25,14 +25,14 @@ type ActionsProps = {
   title: string;
 };
 
-export const Actions = ({
+export const BoardActions = ({
   children,
   side,
   sideOffset,
   alignOffset,
   id,
   title,
-}: ActionsProps) => {
+}: BoardActionsProps) => {
   const onOpen = useRenameModalStore((state) => state.onOpen);
   const { mutate, pending } = useApiMutation(api.board.remove);
 

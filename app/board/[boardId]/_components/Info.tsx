@@ -9,7 +9,7 @@ import { useQuery } from "convex/react";
 import { Menu } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { Actions } from "@/components/Actions";
+import { BoardActions } from "@/components/BoardActions";
 import { Hint } from "@/components/Hint";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -64,7 +64,7 @@ const Info = ({ boardId }: InfoProps) => {
         </Button>
       </Hint>
       <TabSeparator />
-      <Actions
+      <BoardActions
         id={data._id}
         title={data.title}
         side="bottom"
@@ -78,7 +78,7 @@ const Info = ({ boardId }: InfoProps) => {
             </Button>
           </Hint>
         </div>
-      </Actions>
+      </BoardActions>
     </div>
   );
 };
