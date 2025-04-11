@@ -20,6 +20,7 @@ type ActionsProps = {
   children: React.ReactNode;
   side?: DropdownMenuContentProps["side"];
   sideOffset?: DropdownMenuContentProps["sideOffset"];
+  alignOffset?: DropdownMenuContentProps["alignOffset"];
   id: string;
   title: string;
 };
@@ -28,6 +29,7 @@ export const Actions = ({
   children,
   side,
   sideOffset,
+  alignOffset,
   id,
   title,
 }: ActionsProps) => {
@@ -55,6 +57,7 @@ export const Actions = ({
         align="start"
         side={side}
         sideOffset={sideOffset}
+        alignOffset={alignOffset}
         onClick={
           (e) => e.stopPropagation() // prevent page redirect
         }

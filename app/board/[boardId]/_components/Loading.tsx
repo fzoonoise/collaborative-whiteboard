@@ -1,12 +1,8 @@
 import { Loader } from "lucide-react";
 
-// import { Skeleton } from "@/components/ui/skeleton";
 import Info from "./Info";
 import Participants from "./Participants";
 import Toolbar from "./Toolbar";
-// import { ParticipantsSkeleton } from "./Participants";
-// import { InfoSkeleton } from "./Info";
-// import { ToolbarSkeleton } from "./Toolbar";
 // import { ResetCameraSkeleton } from "./reset-camera";
 
 export const Loading = () => {
@@ -19,10 +15,7 @@ export const Loading = () => {
       <Info.Skeleton />
       <Participants.Skeleton />
       <Toolbar.Skeleton />
-      {/* <InfoSkeleton />
-      <ParticipantsSkeleton />
-      <ToolbarSkeleton />
-      <ResetCameraSkeleton /> */}
+      {/* <ResetCameraSkeleton /> */}
     </main>
   );
 };
