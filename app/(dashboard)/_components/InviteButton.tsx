@@ -2,7 +2,12 @@ import { OrganizationProfile } from "@clerk/nextjs";
 import { Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export const InviteButton = () => {
   return (
@@ -15,8 +20,12 @@ export const InviteButton = () => {
       </DialogTrigger>
 
       <DialogContent className="p-0 bg-transparent border-none max-w-[880px]">
-      <DialogTitle className="sr-only">Organization Settings</DialogTitle>
-        <OrganizationProfile />
+        <DialogTitle className="sr-only">Organization Settings</DialogTitle>
+        {/* Use hash to avoid navigation errors & Put "members" first to show it by default. */}
+        <OrganizationProfile routing="hash">
+          <OrganizationProfile.Page label="members" />
+          <OrganizationProfile.Page label="general" />
+        </OrganizationProfile>
       </DialogContent>
     </Dialog>
   );
