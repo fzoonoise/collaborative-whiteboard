@@ -14,7 +14,6 @@ const BoardIdPage = ({ params }: BoardIdPageProps) => {
     document.title = `Whiteboard`;
   }, []);
 
-
   return (
     <Room roomId={params.boardId} fallback={<Loading />}>
       <Canvas boardId={params.boardId} />
