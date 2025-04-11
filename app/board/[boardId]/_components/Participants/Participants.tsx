@@ -4,22 +4,19 @@ import { UserAvatar } from "./UserAvatar";
 import { useOthers, useSelf } from "@/liveblocks.config";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import { connectionIdToColor, devLog } from "@/lib/utils";
+import { connectionIdToColor } from "@/lib/utils";
 
 const MAX_SHOWN_OTHER_USERS = 1;
 
 const Participants = () => {
   const users = useOthers();
-  devLog("users",users)
   const currentUser = useSelf();
-  const hasMoreUsers = users.length  > MAX_SHOWN_OTHER_USERS;
+  const hasMoreUsers = users.length > MAX_SHOWN_OTHER_USERS;
 
   return (
     <div className="absolute h-12 top-2 right-2 bg-white rounded-md p-3 flex items-center shadow-md">
       <div className="flex gap-x-2">
         {users.slice(0, MAX_SHOWN_OTHER_USERS).map(({ connectionId, info }) => {
-            devLog("connectionId",connectionId)
-          
           return (
             <UserAvatar
               borderColor={connectionIdToColor(connectionId)}

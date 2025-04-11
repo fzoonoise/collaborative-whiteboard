@@ -1,7 +1,7 @@
 "use client";
 
 import { Room } from "@/components/Room";
-import { Canvas } from "./_components/Canvas";
+import { Canvas } from "./_components/Canvas/Canvas";
 import { Loading } from "./_components/Loading";
 import { useEffect } from "react";
 

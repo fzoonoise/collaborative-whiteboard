@@ -7,7 +7,7 @@ import { api } from "@/convex/_generated/api";
 import { EmptyBoards } from "./EmptyBoards";
 import { EmptyFavorites } from "./EmptyFavorites";
 import { EmptySearch } from "./EmptySearch";
-import { BoardCard } from "../BoardCard";
+import { BoardCard } from "../BoardCard/BoardCard";
 import { NewBoardButton } from "../BoardCard/NewBoardButton";
 
 type BoardListProps = {
