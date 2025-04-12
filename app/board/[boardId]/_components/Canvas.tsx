@@ -1,10 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 
-import { useHistory, useCanUndo, useCanRedo } from "@/liveblocks.config";
-import { type CanvasState } from "@/types/canvas.types";
+import {
+  useHistory,
+  useCanUndo,
+  useCanRedo,
+  useMutation,
+} from "@/liveblocks.config";
+import { pointerEventToCanvasPoint } from "@/lib/utils";
 import { canvasMode } from "@/constants/canvasConstants";
+import { type Camera, CanvasState } from "@/types/canvas.types";
 
 import Info from "./Info";
 import Participants from "./Participants/Participants";
@@ -22,10 +28,35 @@ export const Canvas = ({ boardId }: CanvasProps) => {
   const [canvasState, setCanvasState] = useState<CanvasState>({
     mode: canvasMode.None,
   });
+  const [camera, setCamera] = useState<Camera>({ x: 0, y: 0 });
 
   const history = useHistory();
   const canUndo = useCanUndo();
   const canRedo = useCanRedo();
+
+  const onWheel = useCallback((e: React.WheelEvent) => {
+    setCamera((camera) => {
+      return {
+        x: camera.x - e.deltaX,
+        y: camera.y - e.deltaY,
+      };
+    });
+  }, []);
+
+  const onPointerMove = useMutation(
+    ({ setMyPresence }, e: React.PointerEvent) => {
+      e.preventDefault();
+      const current = pointerEventToCanvasPoint(e, camera);
+
+      setMyPresence({ cursor: current });
+    },
+    []
+  );
+
+  // Remove cursor when leaving other's canvas
+  const onPointerLeave = useMutation(({ setMyPresence }) => {
+    setMyPresence({ cursor: null });
+  }, []);
 
   // const info = useSelf((me) => me.info);
   // devLog("Current logged-in user info", info);
@@ -43,49 +74,13 @@ export const Canvas = ({ boardId }: CanvasProps) => {
         redo={history.redo}
       />
       <svg
-        ref={svgRef}
         className="h-[100vh] w-[100vw]"
         onWheel={onWheel}
         onPointerMove={onPointerMove}
         onPointerLeave={onPointerLeave}
-        onPointerUp={onPointerUp}
-        onPointerDown={onPointerDown}
       >
-        <g
-          style={{
-            transform: `translate(${camera.x}px, ${camera.y}px)`,
-          }}
-        >
-          {layerIds.map((layerId) => {
-            return (
-              <LayerPreview
-                key={layerId}
-                id={layerId}
-                onLayerPointerDown={onLayerPointerDown}
-                selectionColor={layerIdsToColorSelection[layerId]}
-              />
-            );
-          })}
-          <SelectionBox onResizeHandlePointerDown={onResizeHandlePointerDown} />
-          {canvasState.mode === CanvasMode.SelectionNet &&
-            canvasState.current && (
-              <rect
-                className="fill-blue-500/5 stroke-blue-500 stroke-1"
-                x={Math.min(canvasState.origin.x, canvasState.current.x)}
-                y={Math.min(canvasState.origin.y, canvasState.current.y)}
-                width={Math.abs(canvasState.origin.x - canvasState.current.x)}
-                height={Math.abs(canvasState.origin.y - canvasState.current.y)}
-              />
-            )}
+        <g>
           <CursorsPresence />
-          {pencilDraft && pencilDraft.length > 0 && (
-            <Path
-              points={pencilDraft}
-              fill={colorToCss(lastUsedColor)}
-              x={0}
-              y={0}
-            />
-          )}
         </g>
       </svg>
     </main>
