@@ -1,8 +1,8 @@
 import { v } from "convex/values";
-
 import { mutation, query } from "./_generated/server";
-import { devLog } from "@/lib/utils";
 import { Id } from "./_generated/dataModel";
+
+// import { devLog } from "@/lib/utils";
 
 const images = Array.from(
   { length: 10 },

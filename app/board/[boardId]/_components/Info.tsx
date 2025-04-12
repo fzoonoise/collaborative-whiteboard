@@ -10,10 +10,10 @@ import { Menu } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { BoardActions } from "@/components/BoardActions";
+import { useRenameModalStore } from "@/store/useRenameModalStore";
 import { Hint } from "@/components/Hint";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useRenameModalStore } from "@/store/useRenameModalStore";
 
 type InfoProps = {
   boardId: string;

@@ -9,9 +9,8 @@ import { toast } from "sonner";
 
 import { api } from "@/convex/_generated/api";
 import { BoardActions } from "@/components/BoardActions";
-import { Skeleton } from "@/components/ui/skeleton";
 import { useApiMutation } from "@/hooks/useApiMutation";
-
+import { Skeleton } from "@/components/ui/skeleton";
 import { Footer } from "./Footer";
 
 type BoardCardProps = {

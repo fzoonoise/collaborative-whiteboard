@@ -1,10 +1,10 @@
 "use client";
 
-import { UserAvatar } from "./UserAvatar";
 import { useOthers, useSelf } from "@/liveblocks.config";
 
-import { Skeleton } from "@/components/ui/skeleton";
 import { connectionIdToColor } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
+import { UserAvatar } from "./UserAvatar";
 
 const MAX_SHOWN_OTHER_USERS = 1;
 

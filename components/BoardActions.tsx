@@ -3,6 +3,10 @@
 import type { DropdownMenuContentProps } from "@radix-ui/react-dropdown-menu";
 import { Link2, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
+
+import { api } from "@/convex/_generated/api";
+import { useApiMutation } from "@/hooks/useApiMutation";
+import { useRenameModalStore } from "@/store/useRenameModalStore";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,10 +15,6 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { ConfirmModal } from "./modals/ConfirmModal";
-
-import { api } from "@/convex/_generated/api";
-import { useApiMutation } from "@/hooks/useApiMutation";
-import { useRenameModalStore } from "@/store/useRenameModalStore";
 
 type BoardActionsProps = {
   children: React.ReactNode;

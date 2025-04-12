@@ -2,12 +2,12 @@
 
 import Image from "next/image";
  import { useOrganization } from "@clerk/nextjs";
-import { useApiMutation } from "@/hooks/useApiMutation";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
-
-import { Button } from "@/components/ui/button";
-import { api } from "@/convex/_generated/api";
+ import { useRouter } from "next/navigation";
+ import { toast } from "sonner";
+ 
+ import { api } from "@/convex/_generated/api";
+ import { useApiMutation } from "@/hooks/useApiMutation";
+ import { Button } from "@/components/ui/button";
 
 export const EmptyBoards = () => {
   const router = useRouter();

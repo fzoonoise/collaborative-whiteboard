@@ -3,8 +3,8 @@
 import { useOrganization, useOrganizationList } from "@clerk/nextjs";
 import Image from "next/image";
 
-import { Hint } from "@/components/Hint";
 import { cn } from "@/lib/utils";
+import { Hint } from "@/components/Hint";
 
 type ItemProps = {
   id: string;
