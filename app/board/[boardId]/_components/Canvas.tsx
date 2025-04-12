@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { useHistory, useCanUndo, useCanRedo } from "@/liveblocks.config";
 
+import { useHistory, useCanUndo, useCanRedo } from "@/liveblocks.config";
 import { type CanvasState } from "@/types/canvas.types";
 import { canvasMode } from "@/constants/canvasConstants";
+
 import Info from "./Info";
 import Participants from "./Participants/Participants";
 import Toolbar from "./Toolbar/Toolbar";

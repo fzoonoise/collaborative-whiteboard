@@ -1,15 +1,16 @@
 "use client";
 
-import { useAuth } from "@clerk/nextjs";
 import { formatDistanceToNow } from "date-fns";
 import { MoreHorizontal } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
 
+import { useAuth } from "@clerk/nextjs";
 import { api } from "@/convex/_generated/api";
-import { BoardActions } from "@/components/BoardActions";
 import { useApiMutation } from "@/hooks/useApiMutation";
+
+import { BoardActions } from "@/components/BoardActions";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Footer } from "./Footer";
 

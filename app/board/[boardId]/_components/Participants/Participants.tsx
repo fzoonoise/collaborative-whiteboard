@@ -1,8 +1,8 @@
 "use client";
 
 import { useOthers, useSelf } from "@/liveblocks.config";
-
 import { connectionIdToColor } from "@/lib/utils";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { UserAvatar } from "./UserAvatar";
 

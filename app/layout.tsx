@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import "./globals.css";
-import { ConvexClientProvider } from "@/providers/ConvexClientProvider";
 import { Toaster } from "@/components/ui/sonner";
+
+import { ConvexClientProvider } from "@/providers/ConvexClientProvider";
 import { ModalProvider } from "@/providers/ModalProvider";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Collaborative Whiteboard",

@@ -1,8 +1,8 @@
 "use client";
 
-import { CreateOrganization } from "@clerk/nextjs";
 import { Plus } from "lucide-react";
 
+import { CreateOrganization } from "@clerk/nextjs";
 import { Hint } from "@/components/Hint";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 

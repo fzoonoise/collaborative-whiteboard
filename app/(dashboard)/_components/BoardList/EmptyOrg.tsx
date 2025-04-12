@@ -1,6 +1,6 @@
-import { CreateOrganization } from "@clerk/nextjs";
 import Image from "next/image";
 
+import { CreateOrganization } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 

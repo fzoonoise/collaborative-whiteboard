@@ -1,16 +1,17 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
 import { Poppins } from "next/font/google";
-import { api } from "@/convex/_generated/api";
-import { type Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
 import { Menu } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
 
+import { api } from "@/convex/_generated/api";
+import { type Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
-import { BoardActions } from "@/components/BoardActions";
 import { useRenameModalStore } from "@/store/useRenameModalStore";
+
+import { BoardActions } from "@/components/BoardActions";
 import { Hint } from "@/components/Hint";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";

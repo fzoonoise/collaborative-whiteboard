@@ -5,7 +5,6 @@ import {
   UserButton,
   useOrganization,
 } from "@clerk/nextjs";
-
 import { SearchInput } from "./SearchInput";
 import { InviteButton } from "./InviteButton";
 

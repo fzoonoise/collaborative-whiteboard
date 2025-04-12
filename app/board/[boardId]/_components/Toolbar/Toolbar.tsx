@@ -1,5 +1,6 @@
 "use client";
 
+import { canvasMode, layerType } from "@/constants/canvasConstants";
 import {
   Circle,
   MousePointer2,
@@ -12,7 +13,6 @@ import {
 } from "lucide-react";
 import { type CanvasState } from "@/types/canvas.types";
 
-import { canvasMode, layerType } from "@/constants/canvasConstants";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ToolButton } from "./ToolButton";
 

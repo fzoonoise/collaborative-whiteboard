@@ -1,6 +1,6 @@
-import { OrganizationProfile } from "@clerk/nextjs";
 import { Plus } from "lucide-react";
 
+import { OrganizationProfile } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,

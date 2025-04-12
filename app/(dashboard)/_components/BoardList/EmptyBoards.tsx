@@ -1,19 +1,19 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import Image from "next/image";
- import { useOrganization } from "@clerk/nextjs";
- import { useRouter } from "next/navigation";
- import { toast } from "sonner";
- 
- import { api } from "@/convex/_generated/api";
- import { useApiMutation } from "@/hooks/useApiMutation";
- import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+
+import { useOrganization } from "@clerk/nextjs";
+import { api } from "@/convex/_generated/api";
+import { useApiMutation } from "@/hooks/useApiMutation";
+
+import { Button } from "@/components/ui/button";
 
 export const EmptyBoards = () => {
   const router = useRouter();
   const { organization } = useOrganization();
   const { mutate, pending } = useApiMutation(api.board.create);
-
 
   const handleCreateBoard = () => {
     if (!organization) return;

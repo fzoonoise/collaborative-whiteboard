@@ -1,6 +1,7 @@
 import { v } from "convex/values";
+
 import { mutation, query } from "./_generated/server";
-import { Id } from "./_generated/dataModel";
+import { type Id } from "./_generated/dataModel";
 
 // import { devLog } from "@/lib/utils";
 
@@ -159,7 +160,6 @@ export const getBoardById = query({
     return board;
   },
 });
-
 
 /**
  * One-time cleanup: delete favorites pointing to non-existent boards.

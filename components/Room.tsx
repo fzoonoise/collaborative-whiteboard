@@ -1,8 +1,9 @@
 "use client";
 
 import { type ReactNode } from "react";
-import { ClientSideSuspense } from "@liveblocks/react";
+
 import { RoomProvider } from "@/liveblocks.config";
+import { ClientSideSuspense } from "@liveblocks/react";
 
 
 
