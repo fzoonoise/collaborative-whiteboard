@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 
 import { Room } from "@/components/Room";
-import { Canvas } from "./_components/Canvas";
+import Canvas from "./_components/Canvas";
 import { Loading } from "./_components/Loading";
 
 type BoardIdPageProps = {
