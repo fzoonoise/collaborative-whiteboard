@@ -3,7 +3,7 @@
 import { useOrganization } from "@clerk/nextjs";
 
 import { EmptyOrg } from "./_components/BoardList/EmptyOrg";
-import { BoardList } from "./_components/BoardList/BoardList";
+import BoardList from "./_components/BoardList/BoardList";
 
 type DashboardPageProps = {
   searchParams: {

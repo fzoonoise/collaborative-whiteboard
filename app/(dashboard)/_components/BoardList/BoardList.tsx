@@ -7,7 +7,7 @@ import { api } from "@/convex/_generated/api";
 import { EmptyBoards } from "./EmptyBoards";
 import { EmptyFavorites } from "./EmptyFavorites";
 import { EmptySearch } from "./EmptySearch";
-import { BoardCard } from "../BoardCard/BoardCard";
+import BoardCard from "../BoardCard/BoardCard";
 import { NewBoardButton } from "../BoardCard/NewBoardButton";
 
 type BoardListProps = {
@@ -18,7 +18,7 @@ type BoardListProps = {
   };
 };
 
-export const BoardList = ({ orgId, query }: BoardListProps) => {
+const BoardList = ({ orgId, query }: BoardListProps) => {
   const data = useQuery(api.boards.get, { orgId, ...query });
 
   const BoardTitle = (
@@ -79,3 +79,5 @@ export const BoardList = ({ orgId, query }: BoardListProps) => {
     </div>
   );
 };
+
+export default BoardList;

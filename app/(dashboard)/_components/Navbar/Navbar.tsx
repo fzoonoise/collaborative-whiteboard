@@ -28,7 +28,7 @@ const appearanceStyle = {
   },
 };
 
-export const Navbar = () => {
+const Navbar = () => {
   const { organization } = useOrganization();
 
   return (
@@ -47,3 +47,5 @@ export const Navbar = () => {
     </nav>
   );
 };
+
+export default Navbar;

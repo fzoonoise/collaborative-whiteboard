@@ -25,7 +25,7 @@ type BoardCardProps = {
   isFavorite: boolean;
 };
 
-export const BoardCard = ({
+const BoardCard = ({
   id,
   title,
   imageUrl,
@@ -101,3 +101,5 @@ const Overlay = () => {
     />
   );
 };
+
+export default BoardCard;

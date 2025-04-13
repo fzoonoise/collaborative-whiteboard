@@ -1,4 +1,4 @@
-import { Navbar } from "./_components/Navbar/Navbar";
+import Navbar from "./_components/Navbar/Navbar";
 import { OrgSidebar } from "./_components/OrgSidebar";
 import Sidebar from "./_components/Sidebar/Sidebar";
 
