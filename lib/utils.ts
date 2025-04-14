@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
-import { type Camera, Color } from "@/types/canvas.types";
+import type { Camera, Color } from "@/types/canvas.types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -9,7 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 
 const UserColors = [
   "#DC2626",
-  "#D97706",
+  "#D97706", 
   "#059669",
   "#7C3AED",
   "#DB2777",
@@ -17,7 +17,7 @@ const UserColors = [
   "#FBBF24",
   "#4B5563",
   "#6B7280",
-  "#1D4ED8",
+  "#78350F",
 ];
 
 export function connectionIdToColor(connectionId: number): string {

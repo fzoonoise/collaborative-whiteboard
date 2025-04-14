@@ -1,4 +1,4 @@
-import { canvasMode, layerType, side } from "@/constants/canvasConstants";
+import { canvasMode, layerType } from "@/constants/canvasConstants";
 
 export type Color = {
   r: number;
@@ -39,9 +39,20 @@ export type PathLayer = LayerMap["Path"] & { points: number[][] };
 export type TextLayer = LayerMap["Text"];
 export type NoteLayer = LayerMap["Note"];
 
-export type Side = keyof typeof side;
-
 export type CanvasMode = keyof typeof canvasMode;
+
+/**
+ * Enum representing the four directional sides.
+ * Each value is a distinct power of 2 to allow bitwise combination.
+ * This enables efficient encoding of multiple directions in a single value
+ * using bitwise operations (e.g., Top | Left = 5).
+ */
+export enum Side {
+  Top = 1,
+  Bottom = 2,
+  Left = 4,
+  Right = 8,
+}
 
 export type CanvasState =
   | {

@@ -15,10 +15,3 @@ export const layerType = {
   Text: "Text",
   Note: "Note",
 } as const;
-
-export const side = {
-  Top: 1,
-  Bottom: 2,
-  Left: 4,
-  Right: 8,
-} as const;
