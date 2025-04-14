@@ -1,6 +1,6 @@
 import { Loader } from "lucide-react";
 
-import Info from "./Info";
+import Info from "./Canvas/Info";
 import Participants from "./Participants/Participants";
 import Toolbar from "./Toolbar/Toolbar";
 
