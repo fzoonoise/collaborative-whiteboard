@@ -35,13 +35,37 @@ import CursorsPresence from "../CursorsPresence/CursorsPresence";
 import LayerPreview from "../LayerPreview/LayerPreview";
 import { SelectionBox } from "./SelectionBox";
 
-// import { useSelf } from "@/liveblocks.config";
-
 type CanvasProps = {
   boardId: string;
 };
 
 const MAX_LAYERS = 300;
+
+function calcResizeBounds(bounds: Rect, corner: Side, point: Point): Rect {
+  const result = { ...bounds };
+
+  if ((corner & Side.Left) === Side.Left) {
+    result.x = Math.min(bounds.x + bounds.width, point.x);
+    result.width = Math.abs(bounds.x + bounds.width - point.x);
+  }
+
+  if ((corner & Side.Right) === Side.Right) {
+    result.x = Math.min(bounds.x, point.x);
+    result.width = Math.abs(bounds.x - point.x);
+  }
+
+  if ((corner & Side.Top) === Side.Top) {
+    result.y = Math.min(bounds.y + bounds.height, point.y);
+    result.height = Math.abs(bounds.y + bounds.height - point.y);
+  }
+
+  if ((corner & Side.Bottom) === Side.Bottom) {
+    result.y = Math.min(bounds.y, point.y);
+    result.height = Math.abs(bounds.y - point.y);
+  }
+
+  return result;
+}
 
 const Canvas = ({ boardId }: CanvasProps) => {
   const [canvasState, setCanvasState] = useState<CanvasState>({
@@ -59,8 +83,9 @@ const Canvas = ({ boardId }: CanvasProps) => {
   const history = useHistory();
   const canUndo = useCanUndo();
   const canRedo = useCanRedo();
-  //init end
+  // =====================================  End: init  =====================================
 
+  // ==========================  Start: Layer Mutation Functions  ==========================
   const insertLayer = useMutation(
     (
       { storage, setMyPresence },
@@ -92,7 +117,38 @@ const Canvas = ({ boardId }: CanvasProps) => {
     [lastUsedColor]
   );
 
-  const onResizeHandlePointerDown = useCallback(
+  const resizeSelectedLayer = useMutation(
+    ({ storage, self }, point: Point) => {
+      if (canvasState.mode !== canvasMode.Resizing) {
+        return;
+      }
+
+      const newBounds = calcResizeBounds(
+        canvasState.initialBounds,
+        canvasState.corner,
+        point
+      );
+      devLog("canvasState.mode", canvasState.mode);
+
+
+      const liveLayers = storage.get("layers");
+      devLog("liveLayers", liveLayers);
+
+      const layer = liveLayers.get(self.presence.selection[0]);
+      devLog("self", self);
+
+      devLog("layer", layer);
+
+
+      if (layer) {
+        layer.update(newBounds);
+      }
+    },
+    [canvasState]
+  );
+  // ===========================  End: Layer Mutation Functions  ===========================
+
+  const handleResizePointerDown = useCallback(
     (corner: Side, initialBounds: Rect) => {
       history.pause();
       setCanvasState({
@@ -104,7 +160,9 @@ const Canvas = ({ boardId }: CanvasProps) => {
     [history]
   );
 
-  const onWheel = useCallback((event: React.WheelEvent) => {
+  // ==========================  Start: SVG Interaction Handling  ==========================
+
+  const handleCameraPanOnWheel = useCallback((event: React.WheelEvent) => {
     setCamera((camera) => {
       return {
         x: camera.x - event.deltaX,
@@ -113,27 +171,29 @@ const Canvas = ({ boardId }: CanvasProps) => {
     });
   }, []);
 
-  const onPointerMove = useMutation(
+  const handlePointerMove = useMutation(
     ({ setMyPresence }, event: React.PointerEvent) => {
       event.preventDefault();
       const current = pointerEventToCanvasPoint(event, camera);
 
+      if (canvasState.mode === canvasMode.Resizing) {
+        resizeSelectedLayer(current);
+      }
+
       setMyPresence({ cursor: current });
     },
-    []
+    [camera, canvasState, resizeSelectedLayer]
   );
 
-  // Remove cursor when leaving other's canvas
-  const onPointerLeave = useMutation(({ setMyPresence }) => {
+  const handlePointerLeave = useMutation(({ setMyPresence }) => {
+    // Remove cursor when leaving other's canvas
     setMyPresence({ cursor: null });
   }, []);
 
   // Similar to onMouseUp
-  const onPointerUp = useMutation(
+  const handlePointerUp = useMutation(
     ({}, event) => {
       const point = pointerEventToCanvasPoint(event, camera);
-
-      // devLog("onPointerUp", { point, mode: canvasState.mode });
 
       if (canvasState.mode === canvasMode.Inserting) {
         insertLayer(canvasState.layerType, point);
@@ -142,13 +202,10 @@ const Canvas = ({ boardId }: CanvasProps) => {
       }
       history.resume();
     },
-    [
-      camera,
-      canvasState,
-      history,
-      insertLayer,
-    ]
+    [camera, canvasState, history, insertLayer]
   );
+
+  // ========================== End: SVG Interaction Handling ==========================
 
   const selections = useOthersMapped((other) => other.presence.selection);
 
@@ -167,7 +224,6 @@ const Canvas = ({ boardId }: CanvasProps) => {
       const point = pointerEventToCanvasPoint(event, camera);
 
       if (!self.presence.selection.includes(layerId)) {
-        devLog("layerId", layerId);
         setMyPresence({ selection: [layerId] }, { addToHistory: true });
       }
 
@@ -206,10 +262,10 @@ const Canvas = ({ boardId }: CanvasProps) => {
       />
       <svg
         className="h-[100vh] w-[100vw]"
-        onWheel={onWheel}
-        onPointerMove={onPointerMove}
-        onPointerLeave={onPointerLeave}
-        onPointerUp={onPointerUp}
+        onWheel={handleCameraPanOnWheel}
+        onPointerMove={handlePointerMove}
+        onPointerLeave={handlePointerLeave}
+        onPointerUp={handlePointerUp}
       >
         <g
           style={{
@@ -226,7 +282,7 @@ const Canvas = ({ boardId }: CanvasProps) => {
               />
             );
           })}
-          <SelectionBox onResizeHandlePointerDown={onResizeHandlePointerDown} />
+          <SelectionBox handleResizePointerDown={handleResizePointerDown} />
 
           <CursorsPresence />
         </g>
