@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
-import type { Camera, Color } from "@/types/canvas.types";
+import { Camera, Color } from "@/types/canvas.types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -9,7 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 
 const UserColors = [
   "#DC2626",
-  "#D97706", 
+  "#D97706",
   "#059669",
   "#7C3AED",
   "#DB2777",
@@ -54,5 +54,38 @@ export function devLog(name: string, value: unknown): void {
     }
   }
 
-  console.log(`🔍 ${name} ==>`, output);
+  const type = typeof value;
+  const date = new Date();
+  date.setMinutes(date.getUTCMinutes());
+
+  const [hours, minutes, seconds] = [
+    date.getHours(),
+    date.getMinutes(),
+    date.getSeconds(),
+  ].map((unit) => String(unit).padStart(2, "0"));
+
+  const timeStamp = `[${hours}:${minutes}:${seconds}]`;
+  const nameStyle = "font-weight: bold; color: #7BC96F	"; // Soft green, good in dark/light
+  const valueStyle = "color: white;";
+  const metaStyle = "color: #94A3B8	"; // Graphite Gray
+
+  const isCollapsible = value !== null && typeof value === "object";
+
+  if (isCollapsible) {
+    console.groupCollapsed(
+      `%c🔍 ${name} %c| Type: ${type} ${timeStamp} ==`,
+      nameStyle,
+      metaStyle
+    );
+    console.log(`%c${output}`, valueStyle);
+    console.groupEnd();
+  } else {
+    console.log(
+      `%c🔍 ${name} ==> %c${value} %c| Type: ${type} ${timeStamp}`,
+      nameStyle,
+      valueStyle,
+      metaStyle
+    );
+  }
 }
+
