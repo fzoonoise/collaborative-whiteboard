@@ -130,15 +130,9 @@ const Canvas = ({ boardId }: CanvasProps) => {
         canvasState.corner,
         point
       );
-      devLog("canvasState.mode", canvasState.mode);
 
       const liveLayers = storage.get("layers");
-      devLog("liveLayers", liveLayers);
-
       const layer = liveLayers.get(self.presence.selection[0]);
-      devLog("self", self);
-
-      devLog("layer", layer);
 
       if (layer) {
         layer.update(newBounds);
@@ -146,6 +140,41 @@ const Canvas = ({ boardId }: CanvasProps) => {
     },
     [canvasState]
   );
+
+  const translateSelectedLayers = useMutation(
+    ({ storage, self }, point: Point) => {
+      if (canvasState.mode !== canvasMode.Translating) {
+        return;
+      }
+      
+      const offset = {
+        x: point.x - canvasState.current.x,
+        y: point.y - canvasState.current.y,
+      };
+
+      const liveLayers = storage.get("layers");
+      for (const id of self.presence.selection) {
+        const layer = liveLayers.get(id);
+        if (layer) {
+          layer.update({
+            x: layer.get("x") + offset.x,
+            y: layer.get("y") + offset.y,
+          });
+        }
+      }
+      setCanvasState({ mode: canvasMode.Translating, current: point });
+    },
+    [canvasState]
+  );
+
+  const unSelectLayers = useMutation(({ self, setMyPresence }) => {
+    // selected something
+    if (self.presence.selection.length > 0) {
+      devLog("self",self)
+      setMyPresence({ selection: [] }, { addToHistory: true });
+    }
+  }, []);
+
   // ===========================  End: Layer Mutation Functions  ===========================
 
   const handleResizePointerDown = useCallback(
@@ -176,13 +205,23 @@ const Canvas = ({ boardId }: CanvasProps) => {
       event.preventDefault();
       const current = pointerEventToCanvasPoint(event, camera);
 
-      if (canvasState.mode === canvasMode.Resizing) {
-        resizeSelectedLayer(current);
+      // if (canvasState.mode === canvasMode.Translating) {
+      //   translateSelectedLayers(current);
+      // } else if (canvasState.mode === canvasMode.Resizing) {
+      //   resizeSelectedLayer(current);
+      // }
+      switch (canvasState.mode) {
+        case canvasMode.Resizing:
+          resizeSelectedLayer(current);
+          break;
+        case canvasMode.Translating:
+          translateSelectedLayers(current);
+          break;
       }
 
       setMyPresence({ cursor: current });
     },
-    [camera, canvasState, resizeSelectedLayer]
+    [camera, canvasState, resizeSelectedLayer, translateSelectedLayers]
   );
 
   const handlePointerLeave = useMutation(({ setMyPresence }) => {
@@ -190,26 +229,64 @@ const Canvas = ({ boardId }: CanvasProps) => {
     setMyPresence({ cursor: null });
   }, []);
 
+  const handlePointerDown = useCallback(
+    (event: React.PointerEvent) => {
+      if (canvasState.mode === canvasMode.Inserting) {
+        return;
+      }
+
+      const point = pointerEventToCanvasPoint(event, camera);
+
+      if (canvasState.mode === canvasMode.Pencil) {
+        return;
+      }
+
+      setCanvasState({ mode: canvasMode.Pressing, origin: point });
+    },
+    [camera, canvasState.mode, setCanvasState]
+  );
+
   // Similar to onMouseUp
   const handlePointerUp = useMutation(
     ({}, event) => {
       const point = pointerEventToCanvasPoint(event, camera);
 
-      if (canvasState.mode === canvasMode.Inserting) {
-        insertLayer(canvasState.layerType, point);
-      } else {
-        setCanvasState({ mode: canvasMode.None });
+      switch (canvasState.mode) {
+        case canvasMode.None:
+        case canvasMode.Pressing:
+          unSelectLayers();
+          setCanvasState({ mode: canvasMode.None });
+          break;
+        case canvasMode.Inserting:
+          insertLayer(canvasState.layerType, point);
+          break;
+        default:
+          setCanvasState({ mode: canvasMode.None });
+          break;
       }
+
+      // if (
+      //   canvasState.mode === canvasMode.None ||
+      //   canvasState.mode === canvasMode.Pressing
+      // ) {
+      //   devLog("unselect", "unselect");
+      //   setCanvasState({ mode: canvasMode.None });
+      // } else if (canvasState.mode === canvasMode.Inserting) {
+      //   insertLayer(canvasState.layerType, point);
+      // } else {
+      //   setCanvasState({ mode: canvasMode.None });
+      // }
+
       history.resume();
     },
-    [camera, canvasState, history, insertLayer]
+    [camera, canvasState, history, insertLayer, unSelectLayers]
   );
 
   // ========================== End: SVG Interaction Handling ==========================
 
   const selections = useOthersMapped((other) => other.presence.selection);
 
-  const onLayerPointerDown = useMutation(
+  const handleLayerPointerDown = useMutation(
     ({ self, setMyPresence }, event: React.PointerEvent, layerId: string) => {
       if (
         canvasState.mode === canvasMode.Pencil ||
@@ -265,6 +342,7 @@ const Canvas = ({ boardId }: CanvasProps) => {
         onWheel={handleCameraPanOnWheel}
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
+        onPointerDown={handlePointerDown}
         onPointerUp={handlePointerUp}
       >
         <g
@@ -277,7 +355,7 @@ const Canvas = ({ boardId }: CanvasProps) => {
               <LayerPreview
                 key={layerId}
                 id={layerId}
-                onLayerPointerDown={onLayerPointerDown}
+                handleLayerPointerDown={handleLayerPointerDown}
                 selectionColor={layerIdsToColorSelection[layerId]} // Displays the indicator element used by another user
               />
             );
