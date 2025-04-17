@@ -44,6 +44,8 @@ const MAX_LAYERS = 300;
 function calcResizeBounds(bounds: Rect, corner: Side, point: Point): Rect {
   const result = { ...bounds };
 
+  // Bitwise AND is used to check if a specific side flag (e.g. Left, Top) is set in the corner value.
+  // Each side is a bit flag (1, 2, 4, 8), so we can combine them (e.g. Left | Top = 5), and use & to test inclusion.
   if ((corner & Side.Left) === Side.Left) {
     result.x = Math.min(bounds.x + bounds.width, point.x);
     result.width = Math.abs(bounds.x + bounds.width - point.x);
@@ -130,7 +132,6 @@ const Canvas = ({ boardId }: CanvasProps) => {
       );
       devLog("canvasState.mode", canvasState.mode);
 
-
       const liveLayers = storage.get("layers");
       devLog("liveLayers", liveLayers);
 
@@ -138,7 +139,6 @@ const Canvas = ({ boardId }: CanvasProps) => {
       devLog("self", self);
 
       devLog("layer", layer);
-
 
       if (layer) {
         layer.update(newBounds);
