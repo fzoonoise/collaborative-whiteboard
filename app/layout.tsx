@@ -8,6 +8,9 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Collaborative Whiteboard",
   description: "",
+  icons: {
+    icon: '/logo.svg',
+  },
 };
 
 export default function RootLayout({
