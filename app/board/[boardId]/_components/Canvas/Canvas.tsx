@@ -19,7 +19,7 @@ import {
 } from "@/lib/utils";
 import { canvasMode } from "@/constants/canvasConstants";
 import {
-  type Camera,
+  Camera,
   CanvasState,
   Color,
   LayerType,
@@ -27,6 +27,10 @@ import {
   Rect,
   Side,
 } from "@/types/canvas.types";
+import {
+  calcResizeBounds,
+  findIntersectingLayersWithRectangle,
+} from "./canvasUtils";
 
 import Info from "./Info";
 import Participants from "../Participants/Participants";
@@ -35,40 +39,14 @@ import CursorsPresence from "../CursorsPresence/CursorsPresence";
 import LayerPreview from "../LayerPreview/LayerPreview";
 import { SelectionBox } from "./SelectionBox";
 import { SelectionTools } from "../SelectionTools/SelectionTools";
+import { SelectionNetOverlay } from "./SelectionNetOverlay";
 
 type CanvasProps = {
   boardId: string;
 };
 
 const MAX_LAYERS = 300;
-
-function calcResizeBounds(bounds: Rect, corner: Side, point: Point): Rect {
-  const result = { ...bounds };
-
-  // Bitwise AND is used to check if a specific side flag (e.g. Left, Top) is set in the corner value.
-  // Each side is a bit flag (1, 2, 4, 8), so we can combine them (e.g. Left | Top = 5), and use & to test inclusion.
-  if ((corner & Side.Left) === Side.Left) {
-    result.x = Math.min(bounds.x + bounds.width, point.x);
-    result.width = Math.abs(bounds.x + bounds.width - point.x);
-  }
-
-  if ((corner & Side.Right) === Side.Right) {
-    result.x = Math.min(bounds.x, point.x);
-    result.width = Math.abs(bounds.x - point.x);
-  }
-
-  if ((corner & Side.Top) === Side.Top) {
-    result.y = Math.min(bounds.y + bounds.height, point.y);
-    result.height = Math.abs(bounds.y + bounds.height - point.y);
-  }
-
-  if ((corner & Side.Bottom) === Side.Bottom) {
-    result.y = Math.min(bounds.y, point.y);
-    result.height = Math.abs(bounds.y - point.y);
-  }
-
-  return result;
-}
+const SELECTION_NET_THRESHOLD = 5;
 
 const Canvas = ({ boardId }: CanvasProps) => {
   const [canvasState, setCanvasState] = useState<CanvasState>({
@@ -175,7 +153,33 @@ const Canvas = ({ boardId }: CanvasProps) => {
     }
   }, []);
 
+  const updateSelectionNet = useMutation(
+    ({ storage, setMyPresence }, current: Point, origin: Point) => {
+      const layers = storage.get("layers").toImmutable();
+      setCanvasState({ mode: canvasMode.SelectionNet, origin, current });
+
+      const ids = findIntersectingLayersWithRectangle(
+        layerIds,
+        layers,
+        origin,
+        current
+      );
+
+      setMyPresence({ selection: ids });
+    },
+    [layerIds]
+  );
+
   // ===========================  End: Layer Mutation Functions  ===========================
+
+  const startSelectionNet = useCallback((current: Point, origin: Point) => {
+    if (
+      Math.abs(current.x - origin.x) + Math.abs(current.y - origin.y) >
+      SELECTION_NET_THRESHOLD
+    ) {
+      setCanvasState({ mode: canvasMode.SelectionNet, origin, current });
+    }
+  }, []);
 
   const handleResizePointerDown = useCallback(
     (corner: Side, initialBounds: Rect) => {
@@ -205,12 +209,13 @@ const Canvas = ({ boardId }: CanvasProps) => {
       event.preventDefault();
       const current = pointerEventToCanvasPoint(event, camera);
 
-      // if (canvasState.mode === canvasMode.Translating) {
-      //   translateSelectedLayers(current);
-      // } else if (canvasState.mode === canvasMode.Resizing) {
-      //   resizeSelectedLayer(current);
-      // }
       switch (canvasState.mode) {
+        case canvasMode.Pressing:
+          startSelectionNet(current, canvasState.origin);
+          break;
+        case canvasMode.SelectionNet:
+          updateSelectionNet(current, canvasState.origin);
+          break;
         case canvasMode.Resizing:
           resizeSelectedLayer(current);
           break;
@@ -221,7 +226,14 @@ const Canvas = ({ boardId }: CanvasProps) => {
 
       setMyPresence({ cursor: current });
     },
-    [camera, canvasState, resizeSelectedLayer, translateSelectedLayers]
+    [
+      camera,
+      canvasState,
+      resizeSelectedLayer,
+      translateSelectedLayers,
+      startSelectionNet,
+      updateSelectionNet,
+    ]
   );
 
   const handlePointerLeave = useMutation(({ setMyPresence }) => {
@@ -264,18 +276,6 @@ const Canvas = ({ boardId }: CanvasProps) => {
           setCanvasState({ mode: canvasMode.None });
           break;
       }
-
-      // if (
-      //   canvasState.mode === canvasMode.None ||
-      //   canvasState.mode === canvasMode.Pressing
-      // ) {
-      //   devLog("unselect", "unselect");
-      //   setCanvasState({ mode: canvasMode.None });
-      // } else if (canvasState.mode === canvasMode.Inserting) {
-      //   insertLayer(canvasState.layerType, point);
-      // } else {
-      //   setCanvasState({ mode: canvasMode.None });
-      // }
 
       history.resume();
     },
@@ -362,7 +362,7 @@ const Canvas = ({ boardId }: CanvasProps) => {
             );
           })}
           <SelectionBox handleResizePointerDown={handleResizePointerDown} />
-
+          <SelectionNetOverlay canvasState={canvasState} />
           <CursorsPresence />
         </g>
       </svg>
