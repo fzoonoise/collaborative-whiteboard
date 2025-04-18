@@ -34,6 +34,7 @@ import Toolbar from "../Toolbar/Toolbar";
 import CursorsPresence from "../CursorsPresence/CursorsPresence";
 import LayerPreview from "../LayerPreview/LayerPreview";
 import { SelectionBox } from "./SelectionBox";
+import { SelectionTools } from "../SelectionTools/SelectionTools";
 
 type CanvasProps = {
   boardId: string;
@@ -146,7 +147,7 @@ const Canvas = ({ boardId }: CanvasProps) => {
       if (canvasState.mode !== canvasMode.Translating) {
         return;
       }
-      
+
       const offset = {
         x: point.x - canvasState.current.x,
         y: point.y - canvasState.current.y,
@@ -170,7 +171,6 @@ const Canvas = ({ boardId }: CanvasProps) => {
   const unSelectLayers = useMutation(({ self, setMyPresence }) => {
     // selected something
     if (self.presence.selection.length > 0) {
-      devLog("self",self)
       setMyPresence({ selection: [] }, { addToHistory: true });
     }
   }, []);
@@ -337,6 +337,7 @@ const Canvas = ({ boardId }: CanvasProps) => {
         undo={history.undo}
         redo={history.redo}
       />
+      <SelectionTools camera={camera} setLastUsedColor={setLastUsedColor} />
       <svg
         className="h-[100vh] w-[100vw]"
         onWheel={handleCameraPanOnWheel}

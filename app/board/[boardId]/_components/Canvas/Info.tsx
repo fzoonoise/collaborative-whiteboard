@@ -26,7 +26,7 @@ const font = Poppins({
 });
 
 const TabSeparator = () => {
-  return <div className="text-neutral-300 px-1.5 pointer-events-none">|</div>;
+  return <hr className="h-4 mx-1.5 border border-neutral-300" />;
 };
 
 const Info = ({ boardId }: InfoProps) => {
