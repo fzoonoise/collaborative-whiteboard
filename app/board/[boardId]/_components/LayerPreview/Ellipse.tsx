@@ -1,38 +1,35 @@
 "use client";
 
 import { colorToCss } from "@/lib/utils";
-import { RectangleLayer } from "@/types/canvas.types";
+import { EllipseLayer } from "@/types/canvas.types";
 import { LayerPreviewProps } from "./LayerPreview";
 
-type RectangleProps = LayerPreviewProps & {
-  layer: RectangleLayer;
+type EllipseProps = LayerPreviewProps & {
+  layer: EllipseLayer;
 };
 
-export const Rectangle = ({
+export const Ellipse = ({
   id,
   layer,
   handleLayerPointerDown,
   selectionColor,
-}: RectangleProps) => {
+}: EllipseProps) => {
   const { x, y, width, height, fill } = layer;
 
   return (
-    <rect
+    <ellipse
       className="drop-shadow-md"
-      onPointerDown={(e) => {
-        handleLayerPointerDown(e, id);
-      }}
+      onPointerDown={(e) => handleLayerPointerDown(e, id)}
       style={{
         transform: `translate(${x}px, ${y}px)`,
-        position: "absolute",
       }}
-      x={0}
-      y={0}
-      width={width}
-      height={height}
-      strokeWidth={1}
+      cx={width / 2}
+      cy={height / 2}
+      rx={width / 2}
+      ry={height / 2}
       fill={fill ? colorToCss(fill) : "#000"}
       stroke={selectionColor || "transparent"}
+      strokeWidth={1}
     />
   );
 };

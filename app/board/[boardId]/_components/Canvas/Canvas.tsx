@@ -222,6 +222,9 @@ const Canvas = ({ boardId }: CanvasProps) => {
         case canvasMode.Translating:
           translateSelectedLayers(current);
           break;
+        default:
+          // no action needed for others mode
+          break;
       }
 
       setMyPresence({ cursor: current });
