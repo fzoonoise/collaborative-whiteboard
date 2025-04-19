@@ -74,12 +74,13 @@ const LayerPreview = memo(
         );
       default:
         const exhaustiveCheck: never = layer;
+        type LayerLike = { type: string }; 
         console.warn(
           "Unsupported layer type: %c%s",
           "color: white; font-weight: bold;",
-          (layer as any).type 
+          (layer as LayerLike).type 
         );
-        return null;
+        return exhaustiveCheck;
     }
   }
 );

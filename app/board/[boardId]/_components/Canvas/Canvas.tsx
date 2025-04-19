@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { nanoid } from "nanoid";
 import { toast } from "sonner";
 
@@ -35,6 +35,8 @@ import {
   findIntersectingLayersWithRectangle,
   penPointsToPathLayer,
 } from "./canvasUtils";
+import { useDisableScrollBounce } from "@/hooks/useDisableScrollBounce";
+import { useDeleteLayers } from "@/hooks/useDeleteLayers";
 
 import Info from "./Info";
 import Participants from "../Participants/Participants";
@@ -67,6 +69,7 @@ const Canvas = ({ boardId }: CanvasProps) => {
   const layerIds = useStorage((root) => root.layerIds);
   const pencilDraft = useSelf((me) => me.presence.pencilDraft);
 
+  useDisableScrollBounce();
   const history = useHistory();
   const canUndo = useCanUndo();
   const canRedo = useCanRedo();
@@ -150,6 +153,43 @@ const Canvas = ({ boardId }: CanvasProps) => {
       setCanvasState({ mode: canvasMode.Translating, current: point });
     },
     [canvasState]
+  );
+
+  const duplicateSelectedLayers = useMutation(
+    ({ storage, self, setMyPresence }) => {
+      const liveLayers = storage.get("layers");
+      const liveLayerIds = storage.get("layerIds");
+      const newLayerIds: string[] = [];
+      const layersIdsToCopy = self.presence.selection;
+
+      if (liveLayerIds.length + layersIdsToCopy.length > MAX_LAYERS) {
+        return;
+      }
+
+      if (layersIdsToCopy.length === 0) {
+        return;
+      }
+
+      layersIdsToCopy.forEach((layerId) => {
+        const newLayerId = nanoid();
+        const layer = liveLayers.get(layerId);
+
+        if (layer) {
+          const newLayer = layer.clone();
+          newLayer.set("x", newLayer.get("x") + 20);
+          newLayer.set("y", newLayer.get("y"));
+
+          liveLayerIds.push(newLayerId);
+          liveLayers.set(newLayerId, newLayer);
+
+          newLayerIds.push(newLayerId);
+        }
+      });
+
+      setMyPresence({ selection: [...newLayerIds] }, { addToHistory: true });
+      setCanvasState({ mode: canvasMode.None });
+    },
+    []
   );
 
   const unSelectLayers = useMutation(({ self, setMyPresence }) => {
@@ -419,8 +459,54 @@ const Canvas = ({ boardId }: CanvasProps) => {
     return layerIdsToColorSelection;
   }, [selections]);
 
-  // const info = useSelf((me) => me.info);
-  // devLog("Current logged-in user info", info);
+  const deleteLayers = useDeleteLayers();
+
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      const tag = (e.target as HTMLElement)?.tagName;
+
+      // Skip key handling if focused on input, textarea, or editable content
+      if (
+        tag === "INPUT" ||
+        tag === "TEXTAREA" ||
+        (e.target instanceof HTMLElement && e.target.isContentEditable)
+      ) {
+        return;
+      }
+
+      switch (e.key) {
+        case "Delete":
+        case "Backspace":
+          devLog("delete", "delete");
+          deleteLayers();
+          break;
+        case "d": {
+          if (e.ctrlKey && canvasState.mode === canvasMode.None) {
+            duplicateSelectedLayers();
+          }
+          break;
+        }
+        case "z": {
+          if (e.ctrlKey || e.metaKey) {
+            if (e.shiftKey) {
+              history.redo();
+            } else {
+              history.undo();
+            }
+            break;
+          }
+        }
+        default:
+          break;
+      }
+    }
+
+    document.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+    };
+  }, [history, deleteLayers, canvasState.mode, duplicateSelectedLayers]);
 
   return (
     <main className="h-full w-full relative bg-neutral-100 touch-none">
@@ -434,7 +520,11 @@ const Canvas = ({ boardId }: CanvasProps) => {
         undo={history.undo}
         redo={history.redo}
       />
-      <SelectionTools camera={camera} setLastUsedColor={setLastUsedColor} />
+      <SelectionTools
+        camera={camera}
+        setLastUsedColor={setLastUsedColor}
+        handleDuplicateLayers={duplicateSelectedLayers}
+      />
       <svg
         className="h-[100vh] w-[100vw]"
         onWheel={handleCameraPanOnWheel}
