@@ -3,12 +3,14 @@
 import { memo } from "react";
 
 import { useStorage } from "@/liveblocks.config";
+import { colorToCss } from "@/lib/utils";
 import { layerType } from "@/constants/canvasConstants";
 
 import { Text } from "./Text";
 import { Rectangle } from "./Rectangle";
 import { Ellipse } from "./Ellipse";
 import { Note } from "./Note";
+import { Path } from "./Path";
 
 export type LayerPreviewProps = {
   id: string;
@@ -26,6 +28,15 @@ const LayerPreview = memo(
       case layerType.Text:
         return (
           <Text
+            id={id}
+            layer={layer}
+            handleLayerPointerDown={handleLayerPointerDown}
+            selectionColor={selectionColor}
+          />
+        );
+      case layerType.Note:
+        return (
+          <Note
             id={id}
             layer={layer}
             handleLayerPointerDown={handleLayerPointerDown}
@@ -50,20 +61,23 @@ const LayerPreview = memo(
             selectionColor={selectionColor}
           />
         );
-      case layerType.Note:
+      case layerType.Path:
         return (
-          <Note
-            id={id}
-            layer={layer}
-            handleLayerPointerDown={handleLayerPointerDown}
-            selectionColor={selectionColor}
+          <Path
+            points={layer.points}
+            x={layer.x}
+            y={layer.y}
+            fill={layer.fill ? colorToCss(layer.fill) : "#000"}
+            stroke={selectionColor}
+            handleLayerPointerDown={(e) => handleLayerPointerDown(e, id)}
           />
         );
       default:
+        const exhaustiveCheck: never = layer;
         console.warn(
           "Unsupported layer type: %c%s",
           "color: white; font-weight: bold;",
-          layer.type
+          (layer as any).type 
         );
         return null;
     }
