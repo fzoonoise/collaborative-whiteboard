@@ -15,9 +15,9 @@ const UserColors = [
   "#DB2777",
   "#F87171",
   "#FBBF24",
-  "#4B5563",
-  "#6B7280",
-  "#78350F",
+  "#87CEEB",
+  "#4C1D95",
+  "#9D174D", 
 ];
 
 export function connectionIdToColor(connectionId: number): string {
