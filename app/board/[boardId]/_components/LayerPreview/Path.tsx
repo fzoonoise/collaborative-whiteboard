@@ -2,12 +2,15 @@
 
 import getStroke from "perfect-freehand";
 
+import { StrokeWidth } from "@/types/canvas.types";
+
 type PathProps = {
   x: number;
   y: number;
   points: number[][];
   fill: string;
   stroke?: string;
+  strokeWith:StrokeWidth;
   handleLayerPointerDown?: (e: React.PointerEvent) => void;
 };
 
@@ -33,8 +36,10 @@ export const Path = ({
   points,
   fill,
   stroke,
+  strokeWith,
   handleLayerPointerDown,
 }: PathProps) => {
+
   return (
     <path
       className="drop-shadow-md"
@@ -46,7 +51,7 @@ export const Path = ({
       y={0}
       d={getSvgPathFromStroke(
         getStroke(points, {
-          size: 12,
+          size: strokeWith,
           thinning: 0.5,
           smoothing: 0.5,
           streamline: 0.5,

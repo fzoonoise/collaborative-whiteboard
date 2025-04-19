@@ -4,7 +4,6 @@ import { canvasMode, layerType } from "@/constants/canvasConstants";
 import {
   Circle,
   MousePointer2,
-  Pencil,
   Redo2,
   Square,
   StickyNote,
@@ -15,6 +14,7 @@ import { type CanvasState } from "@/types/canvas.types";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { ToolButton } from "./ToolButton";
+import { PencilButton } from "./PencilButton";
 
 type ToolbarProps = {
   canvasState: CanvasState;
@@ -104,10 +104,8 @@ const Toolbar = ({
             canvasState.layerType === layerType.Ellipse
           }
         />
-        <ToolButton
-          label="Pen"
-          icon={Pencil}
-          onClick={() =>
+        <PencilButton
+          handlePencilModeChange={() =>
             setCanvasState({
               mode: canvasMode.Pencil,
             })

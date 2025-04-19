@@ -1,4 +1,4 @@
-import { canvasMode, layerType } from "@/constants/canvasConstants";
+import { canvasMode, layerType, strokeWidths } from "@/constants/canvasConstants";
 
 export type Color = {
   r: number;
@@ -35,7 +35,7 @@ type LayerMap = {
 
 export type RectangleLayer = LayerMap["Rectangle"];
 export type EllipseLayer = LayerMap["Ellipse"];
-export type PathLayer = LayerMap["Path"] & { points: number[][] };
+export type PathLayer = LayerMap["Path"] & { points: number[][] ,strokeWidth:StrokeWidth};
 export type TextLayer = LayerMap["Text"];
 export type NoteLayer = LayerMap["Note"];
 
@@ -94,3 +94,6 @@ export type Layer =
   | PathLayer
   | TextLayer
   | NoteLayer;
+
+export type StrokeKey = keyof typeof strokeWidths;
+export type StrokeWidth = (typeof strokeWidths)[keyof typeof strokeWidths];

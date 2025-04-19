@@ -6,6 +6,7 @@ import {
   Point,
   Rect,
   Side,
+  StrokeWidth,
 } from "@/types/canvas.types";
 
 export function calcResizeBounds(
@@ -87,7 +88,8 @@ export function findIntersectingLayersWithRectangle(
 
 export function penPointsToPathLayer(
   points: number[][],
-  color: Color
+  color: Color,
+  currentStrokeWidth:StrokeWidth
 ): PathLayer {
   if (points.length < 2) {
     throw new Error("Cannot transform points with less than 2 points.");
@@ -118,5 +120,6 @@ export function penPointsToPathLayer(
     height: bottom - top,
     fill: color,
     points: points.map(([x, y, pressure]) => [x - left, y - top, pressure]),
+    strokeWidth: currentStrokeWidth,
   };
 }

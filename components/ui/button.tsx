@@ -18,8 +18,8 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        board: "hover:bg-blue-500/20 hover:text-blue-800",
-        boardActive: "bg-blue-500/20 text-blue-800",
+        board: "hover:bg-blue-500/20 hover:text-blue-800 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0",
+        boardActive: "bg-blue-500/20 text-blue-800 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-offset-0",
       },
       size: {
         default: "h-10 px-4 py-2",

@@ -70,6 +70,7 @@ const LayerPreview = memo(
             fill={layer.fill ? colorToCss(layer.fill) : "#000"}
             stroke={selectionColor}
             handleLayerPointerDown={(e) => handleLayerPointerDown(e, id)}
+            strokeWith={layer.strokeWidth}
           />
         );
       default:

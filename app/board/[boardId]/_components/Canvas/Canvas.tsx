@@ -47,6 +47,7 @@ import { SelectionBox } from "./SelectionBox";
 import { SelectionTools } from "../SelectionTools/SelectionTools";
 import { SelectionNetOverlay } from "./SelectionNetOverlay";
 import { Path } from "../LayerPreview/Path";
+import { useDrawingSettingsStore } from "@/store/useDrawingSettingsStore";
 
 type CanvasProps = {
   boardId: string;
@@ -73,6 +74,7 @@ const Canvas = ({ boardId }: CanvasProps) => {
   const history = useHistory();
   const canUndo = useCanUndo();
   const canRedo = useCanRedo();
+  const strokeWith = useDrawingSettingsStore((state) => state.strokeWith);
   // =====================================  End: init  =====================================
 
   // ==========================  Start: Layer Mutation Functions  ==========================
@@ -221,9 +223,10 @@ const Canvas = ({ boardId }: CanvasProps) => {
       setMyPresence({
         pencilDraft: [[point.x, point.y, pressure]],
         penColor: lastUsedColor,
+        strokeWith,
       });
     },
-    [lastUsedColor]
+    [lastUsedColor, strokeWith]
   );
 
   const continueDrawing = useMutation(
@@ -256,6 +259,8 @@ const Canvas = ({ boardId }: CanvasProps) => {
       const liveLayers = storage.get("layers");
       const { pencilDraft } = self.presence;
 
+      devLog("liveLayers - insertDrawingPath", liveLayers);
+
       if (
         pencilDraft == null ||
         pencilDraft.length < 2 ||
@@ -275,7 +280,9 @@ const Canvas = ({ boardId }: CanvasProps) => {
       // transform point array to PathLayer object with bounding box & relative points
       liveLayers.set(
         id,
-        new LiveObject(penPointsToPathLayer(pencilDraft, lastUsedColor))
+        new LiveObject(
+          penPointsToPathLayer(pencilDraft, lastUsedColor, strokeWith)
+        )
       );
 
       const liveLayerIds = storage.get("layerIds");
@@ -286,7 +293,7 @@ const Canvas = ({ boardId }: CanvasProps) => {
         mode: canvasMode.Pencil,
       });
     },
-    [lastUsedColor]
+    [lastUsedColor, strokeWith]
   );
 
   // ===========================  End: Layer Mutation Functions  ===========================
@@ -555,6 +562,7 @@ const Canvas = ({ boardId }: CanvasProps) => {
             <Path
               points={pencilDraft}
               fill={colorToCss(lastUsedColor)}
+              strokeWith={strokeWith}
               x={0}
               y={0}
             />
