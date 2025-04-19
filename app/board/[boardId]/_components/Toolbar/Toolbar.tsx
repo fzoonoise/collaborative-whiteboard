@@ -37,7 +37,7 @@ const Toolbar = ({
     <div className="absolute top-[50%] -translate-y-[50%] left-2 flex flex-col gap-y-4">
       <div className="bg-white rounded-md p-1.5 flex gap-1 flex-col items-center shadow-md">
         <ToolButton
-          label="Select (Ctrl+A)"
+          label="Select"
           icon={MousePointer2}
           onClick={() => setCanvasState({ mode: canvasMode.None })}
           isActive={
@@ -49,7 +49,7 @@ const Toolbar = ({
           }
         />
         <ToolButton
-          label="Text (Ctrl+T)"
+          label="Text"
           icon={TypeIcon}
           onClick={() =>
             setCanvasState({
@@ -63,7 +63,7 @@ const Toolbar = ({
           }
         />
         <ToolButton
-          label="Sticky Note (Ctrl+N)"
+          label="Sticky Note"
           icon={StickyNote}
           onClick={() =>
             setCanvasState({
@@ -77,7 +77,7 @@ const Toolbar = ({
           }
         />
         <ToolButton
-          label="Rectangle (Ctrl+R)"
+          label="Rectangle"
           icon={Square}
           onClick={() =>
             setCanvasState({
@@ -91,7 +91,7 @@ const Toolbar = ({
           }
         />
         <ToolButton
-          label="Ellipse (Ctrl+E)"
+          label="Ellipse"
           icon={Circle}
           onClick={() =>
             setCanvasState({
