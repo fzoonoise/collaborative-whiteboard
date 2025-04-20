@@ -91,4 +91,4 @@ LIVEBLOCKS_SECRET_KEY=
 
 ## Disclaimer
 
-This project is for learning purposes, based on a tutorial by [Code with Antonio](https://www.youtube.com/@codewithantonio). The original source code was not published; this implementation is independently built following the tutorial content
+This project is for learning purposes, based on a tutorial by [Code with Antonio](https://www.youtube.com/@codewithantonio). The original source code was not publicly provided in the video; this implementation is independently built by following the tutorial content
