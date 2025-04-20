@@ -1,6 +1,6 @@
 "use client";
 
-import { memo } from "react";
+import { memo, useState } from "react";
 import { Trash2, Palette, Copy } from "lucide-react";
 
 import { useMutation, useSelf } from "@/liveblocks.config";
@@ -23,10 +23,17 @@ import { ColorPicker } from "./ColorPicker";
 type SelectionToolsProps = {
   camera: Camera;
   setLastUsedColor: (color: Color) => void;
+  handleDuplicateLayers: () => void;
 };
 
 export const SelectionTools = memo(
-  ({ camera, setLastUsedColor }: SelectionToolsProps) => {
+  ({
+    camera,
+    setLastUsedColor,
+    handleDuplicateLayers,
+  }: SelectionToolsProps) => {
+    const [open, setOpen] = useState(false);
+
     const selection = useSelf((me) => me.presence.selection);
 
     const handleMoveToFront = useMutation(
@@ -120,9 +127,15 @@ export const SelectionTools = memo(
           </Hint>
 
           <TooltipProvider>
-            <Tooltip delayDuration={100}>
+            <Tooltip delayDuration={100} open={open} onOpenChange={setOpen}>
               <TooltipTrigger asChild>
-                <Button variant="board" size="icon">
+                <Button
+                  onClick={() => {
+                    setOpen(true);
+                  }}
+                  variant="board"
+                  size="icon"
+                >
                   <Palette />
                 </Button>
               </TooltipTrigger>
@@ -136,7 +149,7 @@ export const SelectionTools = memo(
           </TooltipProvider>
 
           <Hint sideOffset={12} label="Duplicate (ctrl + D)">
-            <Button variant="board" size="icon">
+            <Button onClick={handleDuplicateLayers} variant="board" size="icon">
               <Copy />
             </Button>
           </Hint>
