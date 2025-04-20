@@ -62,9 +62,9 @@ const Canvas = ({ boardId }: CanvasProps) => {
   });
   const [camera, setCamera] = useState<Camera>({ x: 0, y: 0 });
   const [lastUsedColor, setLastUsedColor] = useState<Color>({
-    r: 255,
-    g: 255,
-    b: 255,
+    r: 68,
+    g: 202,
+    b: 99,
   });
 
   const strokeWith = useDrawingSettingsStore((state) => state.strokeWith);
@@ -74,7 +74,7 @@ const Canvas = ({ boardId }: CanvasProps) => {
   const history = useHistory();
   const canUndo = useCanUndo();
   const canRedo = useCanRedo();
-  
+
   useDisableScrollBounce();
   // =====================================  End: init  =====================================
 
