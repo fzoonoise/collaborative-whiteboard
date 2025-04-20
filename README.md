@@ -23,7 +23,7 @@ A real-time collaborative whiteboard tool built with modern web technologies.
 - Real-time collaborative whiteboard to add text, shapes, notes, and drawings  
 - Layer ordering, color adjustment, and undo/redo with hotkeys
 
-## Enhancements
+## Improvements & Custom Features
 
 - Converted all interfaces to `type` and refactored type structures  
 - Improved code style and directory structure  
@@ -35,7 +35,8 @@ A real-time collaborative whiteboard tool built with modern web technologies.
   - Enhanced color palette interaction  
 - Added brush size adjustment  
 - Synced page title with board name  
-- Implemented Delete and Backspace hotkeys (with input protection)  
+- Implemented Delete and Backspace hotkeys (with input protection) 
+- Replaced heavy SVG assets with optimized PNGs for performance 
 - Self-hosted on Vercel for public preview  
 - Fixed issue with favorites/search not working after deployment
 
