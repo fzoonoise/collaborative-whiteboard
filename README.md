@@ -1,10 +1,12 @@
 # Collaborative Whiteboard
 
-A real-time collaborative whiteboard tool built with modern web technologies.
+A real-time collaborative whiteboard tool built with modern web technologies
 
 ## Demo
 
 - Live on Vercel: https://collaborative-whiteboard-phi.vercel.app
+  You can sign in using Email or Google. For quicker access, Google login is recommended
+
 
 ## Tech Stack
 
@@ -19,7 +21,7 @@ A real-time collaborative whiteboard tool built with modern web technologies.
 ## Features
 
 - Register with Google or Email, create organizations, and invite collaborators  
-- Adding, deleting, and renaming boards, including search and favorite boards  
+- Search for boards, favorite them, and manage boards (add, delete, rename)
 - Real-time collaborative whiteboard to add text, shapes, notes, and drawings  
 - Layer ordering, color adjustment, and undo/redo with hotkeys
 
@@ -89,4 +91,4 @@ LIVEBLOCKS_SECRET_KEY=
 
 ## Disclaimer
 
-This project is for learning purposes, based on a tutorial by [Code with Antonio](https://www.youtube.com/@codewithantonio). The original source code was not published; this implementation is independently built following the tutorial content.
+This project is for learning purposes, based on a tutorial by [Code with Antonio](https://www.youtube.com/@codewithantonio). The original source code was not published; this implementation is independently built following the tutorial content
