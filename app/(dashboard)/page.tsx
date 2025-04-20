@@ -5,14 +5,7 @@ import { useOrganization } from "@clerk/nextjs";
 import { EmptyOrg } from "./_components/BoardList/EmptyOrg";
 import BoardList from "./_components/BoardList/BoardList";
 
-type DashboardPageProps = {
-  searchParams: {
-    search?: string;
-    favorites?: string;
-  };
-};
-
-const DashboardPage = ({ searchParams }: DashboardPageProps) => {
+const DashboardPage = () => {
   const { organization } = useOrganization();
 
   return (
@@ -20,7 +13,7 @@ const DashboardPage = ({ searchParams }: DashboardPageProps) => {
       {!organization ? (
         <EmptyOrg />
       ) : (
-        <BoardList orgId={organization.id} query={searchParams} />
+        <BoardList orgId={organization.id} />
       )}
     </div>
   );
