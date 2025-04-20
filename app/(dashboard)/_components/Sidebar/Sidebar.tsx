@@ -14,7 +14,6 @@ const Sidebar = () => {
         <Hint label="Source Code" side="right" align="start" sideOffset={18}>
           <a
             className="flex items-center justify-center w-full h-full transition rounded-sm bg-white/25 opacity-60 hover:opacity-100"
-            // href={links.sourceCode} // TODO
             target="_blank"
             rel="noreferrer noopener"
           >

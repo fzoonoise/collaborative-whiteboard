@@ -67,14 +67,15 @@ const Canvas = ({ boardId }: CanvasProps) => {
     b: 255,
   });
 
+  const strokeWith = useDrawingSettingsStore((state) => state.strokeWith);
   const layerIds = useStorage((root) => root.layerIds);
   const pencilDraft = useSelf((me) => me.presence.pencilDraft);
 
-  useDisableScrollBounce();
   const history = useHistory();
   const canUndo = useCanUndo();
   const canRedo = useCanRedo();
-  const strokeWith = useDrawingSettingsStore((state) => state.strokeWith);
+  
+  useDisableScrollBounce();
   // =====================================  End: init  =====================================
 
   // ==========================  Start: Layer Mutation Functions  ==========================
