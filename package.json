@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "deploy": "npm run build && npx convex deploy",
     "start": "next start",
     "lint": "next lint"
   },
