@@ -2,12 +2,12 @@
 
 A real-time collaborative whiteboard tool built with modern web technologies
 
-[![demo](https://img.youtube.com/vi/EbtezRTne7I/maxresdefault.jpg)](https://youtu.be/EbtezRTne7I)
-
 ## Demo
 
 - Live on Vercel: https://collaborative-whiteboard-phi.vercel.app
   You can sign in using Email or Google. For quicker access, Google login is recommended
+- Click the image to play the video.
+  [![demo](https://img.youtube.com/vi/EbtezRTne7I/maxresdefault.jpg)](https://youtu.be/EbtezRTne7I)
 
 ## Tech Stack
 
