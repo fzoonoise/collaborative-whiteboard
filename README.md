@@ -6,14 +6,14 @@ A real-time collaborative whiteboard tool built with modern web technologies
 
 - Live on Vercel: https://collaborative-whiteboard-phi.vercel.app
   You can sign in using Email or Google. For quicker access, Google login is recommended
-- Click the image to play the video.
+- Click the image to play the demo video
   [![demo](https://img.youtube.com/vi/EbtezRTne7I/maxresdefault.jpg)](https://youtu.be/EbtezRTne7I)
 
 ## Tech Stack
 
 - Frontend: Next.js + TypeScript + TailwindCSS  
 - UI: shadcn/ui  
-- Icons: lucide-react (with some custom icons)  
+- Icons: lucide-react (with additional open-source icons)  
 - State Management: zustand  
 - Backend: convex  
 - Auth: clerk  
@@ -28,7 +28,7 @@ A real-time collaborative whiteboard tool built with modern web technologies
 
 ## Improvements & Custom Features
 
-- Converted all interfaces to `type` and refactored type structures  
+- Refactored TypeScript interfaces to type aliases and updated the codebase with modern TypeScript features  
 - Improved code style and directory structure  
 - Fixed version-related package issues  
 - Simplified the invitation steps in the dialog triggered by the invite account button
@@ -52,13 +52,18 @@ A real-time collaborative whiteboard tool built with modern web technologies
 
 ### Development
 
-1. Clone the repository and install dependencies:
+1. Clone the repository and install exact dependencies:
 
    ```bash
-   npm install
+   npm ci
    ```
 
 2. Create a `.env.local` file and fill it based on `.env.example`
+
+Note:
+This project requires API keys from external services.
+Please apply for the necessary keys from Convex, Clerk, and Liveblocks.
+Make sure all required environment variables are set before proceeding.
 
 3. Start Convex backend:
 
